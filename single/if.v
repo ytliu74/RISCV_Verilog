@@ -1,5 +1,4 @@
 `include "const.v"
-`include "IF/pc.v"
 
 module IF (
         input wire clk,
@@ -17,22 +16,17 @@ module IF (
 
     wire PCSrc = Branch && ALU_Zero;
 
-    always @(*) begin
+    always @(posedge clk or posedge reset) begin
         if (reset)
             in_addr <= 0;
+        else begin
+            seq_addr  <= out_addr + 4;
+            jump_addr <= out_addr + jump;
+
+            in_addr <= PCSrc ? jump_addr : seq_addr;
+        end
     end
 
-    always @(posedge clk) begin
-        seq_addr  <= out_addr + 4;
-        jump_addr <= out_addr + jump;
+    assign out_addr = in_addr;
 
-        in_addr <= PCSrc ? jump_addr : seq_addr;
-    end
-
-    pc u_pc(
-           .clk(clk),
-           .reset(reset),
-           .in_addr(in_addr),
-           .out_addr(out_addr)
-       );
 endmodule

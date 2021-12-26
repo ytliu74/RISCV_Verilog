@@ -1,0 +1,1 @@
+1. FIX: read_reg_data_1, read_reg_data_2 in ID is one cycle slower.
