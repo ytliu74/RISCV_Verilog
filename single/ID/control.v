@@ -30,7 +30,7 @@ module control (
             `S_FORMAT_OPCODE:
                 code <= 8'b10001000;
             default:
-                ;
+                code <= 0;
         endcase
     end
 endmodule
