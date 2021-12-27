@@ -12,27 +12,20 @@ module IF (
 
     reg [`INST_ADDR_WIDTH - 1:0] in_addr;
 
-    reg [`INST_ADDR_WIDTH - 1:0] seq_addr;
-    reg [`INST_ADDR_WIDTH - 1:0] jump_addr;
+    wire [`INST_ADDR_WIDTH - 1:0] seq_addr;
+    wire [`INST_ADDR_WIDTH - 1:0] jump_addr;
 
     wire PCSrc = Branch && ALU_Zero;
 
-    always @(*) begin
+    assign seq_addr = out_addr + 4;
+    assign jump_addr = out_addr + jump;
+
+    always @(posedge clk or posedge reset) begin
         if (reset)
             in_addr <= 0;
+        else
+            in_addr <= PCSrc? jump_addr : seq_addr;
     end
 
-    always @(posedge clk) begin
-        seq_addr  <= out_addr + 4;
-        jump_addr <= out_addr + jump;
-
-        in_addr <= PCSrc ? jump_addr : seq_addr;
-    end
-
-    pc u_pc(
-           .clk(clk),
-           .reset(reset),
-           .in_addr(in_addr),
-           .out_addr(out_addr)
-       );
+    assign out_addr = in_addr;
 endmodule

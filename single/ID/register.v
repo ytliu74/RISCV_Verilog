@@ -15,20 +15,35 @@ module register (
     // 32 * 64bit
     reg [`REG_DATA_WIDTH - 1:0] Reg_data [0:`REG_SIZE];
 
-    always @(posedge clk or posedge reset) begin
-        Reg_data[0] <= 0;
+    // always @(posedge clk or posedge reset) begin
+    //     Reg_data[0] <= 0;
 
+    //     if (reset) begin
+    //         read_reg_data_1 <= 0;
+    //         read_reg_data_2 <= 0;
+    //     end
+    //     else begin
+    //         if(RegWrite)
+    //             Reg_data[write_reg_addr] <= write_reg_data;
+    //         else
+    //             ;
+    //         read_reg_data_1 <= Reg_data[read_reg_addr_1];
+    //         read_reg_data_2 <= Reg_data[read_reg_addr_2];
+    //     end
+    // end
+
+    always @(*) begin
         if (reset) begin
             read_reg_data_1 <= 0;
             read_reg_data_2 <= 0;
         end
         else begin
-            if(RegWrite)
+            if (RegWrite)
                 Reg_data[write_reg_addr] <= write_reg_data;
             else
                 ;
-            read_reg_data_1 <= Reg_data[read_reg_addr_1];
-            read_reg_data_2 <= Reg_data[read_reg_addr_2];
+            read_reg_data_1 <= (read_reg_addr_1 == 0) ? 0:Reg_data[read_reg_addr_1];
+            read_reg_data_2 <= (read_reg_addr_2 == 0) ? 0:Reg_data[read_reg_addr_2];
         end
     end
 
