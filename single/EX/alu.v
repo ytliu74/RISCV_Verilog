@@ -4,7 +4,7 @@ module ALU (
         input wire [`ALU_DATA_WIDTH - 1:0] input_data_1,
         input wire [`ALU_DATA_WIDTH - 1:0] input_data_2,
         input wire [`ALU_CONTROL_WIDTH - 1:0] ALU_control,
-        output reg zero,
+        output wire zero,
         output reg [`ALU_DATA_WIDTH - 1:0] output_data
     );
     always @ (input_data_1 or input_data_2 or ALU_control) begin
@@ -32,7 +32,5 @@ module ALU (
         endcase
     end
 
-    always @ (output_data) begin
-        zero <= output_data == 0 ? 1'b1 : 1'b0;
-    end
+    assign zero = output_data == 0 ? 1'b1: 1'b0;
 endmodule

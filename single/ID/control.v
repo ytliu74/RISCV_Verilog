@@ -22,7 +22,7 @@ module control (
             `B_FORMAT_OPCODE:
                 code <= 8'b00000101;
             `J_FORMAT_OPCODE:
-                code <= 8'b00000100;  // ! May be wrong!
+                code <= 8'b00000100;
             `I_addi_FORMAT_OPCODE:
                 code <= 8'b10100000;
             `I_lw_FORMAT_OPCODE:
