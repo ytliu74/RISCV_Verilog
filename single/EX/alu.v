@@ -7,7 +7,7 @@ module ALU (
         output reg zero,
         output reg [`ALU_DATA_WIDTH - 1:0] output_data
     );
-    always @ * begin
+    always @ (input_data_1 or input_data_2 or ALU_control) begin
         case (ALU_control)
             `ALU_AND:
                 output_data <= input_data_1 & input_data_2;
@@ -32,7 +32,7 @@ module ALU (
         endcase
     end
 
-    always @ * begin
+    always @ (output_data) begin
         zero <= output_data == 0 ? 1'b1 : 1'b0;
     end
 endmodule
