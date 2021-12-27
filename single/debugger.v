@@ -1,5 +1,6 @@
 `include "const.v"
 
+// ! Cannot recognize imm correctly
 module DEBUGGER (
         input wire [`INST_WIDTH - 1:0] inst,
         input wire [`REG_DATA_WIDTH - 1:0] imme
@@ -28,19 +29,19 @@ module DEBUGGER (
             `R_FORMAT_OPCODE: begin
                 case ({funct3, funct7})
                     {`ADD_FUNCT3, `ADD_FUNCT7}:
-                        $display("add %d %d %d", rd, rs1, rs2);
+                        $display("add x%d, x%d, x%d", rd, rs1, rs2);
                     {`SUB_FUNCT3, `SUB_FUNCT7}:
-                        $display("sub %d %d %d", rd, rs1, rs2);
+                        $display("sub x%d, x%d, x%d", rd, rs1, rs2);
                     {`XOR_FUNCT3, `XOR_FUNCT7}:
-                        $display("xor %d %d %d", rd, rs1, rs2);
+                        $display("xor x%d, x%d, x%d", rd, rs1, rs2);
                     {`OR_FUNCT3, `OR_FUNCT7}:
-                        $display("or %d %d %d", rd, rs1, rs2);
+                        $display("or x%d, x%d, x%d", rd, rs1, rs2);
                     {`AND_FUNCT3, `AND_FUNCT7}:
-                        $display("and %d %d %d", rd, rs1, rs2);
+                        $display("and x%d, x%d, x%d", rd, rs1, rs2);
                     {`SLL_FUNCT3, `SLL_FUNCT7}:
-                        $display("sll %d %d %d", rd, rs1, rs2);
+                        $display("sll x%d, x%d, x%d", rd, rs1, rs2);
                     {`SRL_FUNCT3, `SRL_FUNCT7}:
-                        $display("srl %d %d %d", rd, rs1, rs2);
+                        $display("srl x%d, x%d, x%d", rd, rs1, rs2);
                     default:
                         ;
                 endcase
@@ -49,9 +50,9 @@ module DEBUGGER (
             `B_FORMAT_OPCODE: begin
                 case (funct3)
                     `BEQ_FUNCT3:
-                        $display("beq %d %d %d", rs1, rs2, imm);
+                        $display("beq x%d, x%d, %d", rs1, rs2, imm);
                     `BLT_FUNCT3:
-                        $display("blt %d %d %d", rs1, rs2, imm);
+                        $display("blt x%d, x%d, %d", rs1, rs2, imm);
                     default:
                         ;
                 endcase
@@ -62,15 +63,15 @@ module DEBUGGER (
             end
             // addi
             `I_addi_FORMAT_OPCODE: begin
-                $display("addi %d %d %d", rd, rs1, imm);
+                $display("addi x%d, x%d, %d", rd, rs1, imm);
             end
             // lw
             `I_lw_FORMAT_OPCODE: begin
-                $display("lw %d %d(%d)", rd, imm, rs1);
+                $display("lw x%d, %d(x%d)", rd, imm, rs1);
             end
             // sw
             `S_FORMAT_OPCODE: begin
-                $display("sw %d %d(%d)", rs2, imm, rs1);
+                $display("sw x%d, %d(x%d)", rs2, imm, rs1);
             end
             default:
                 ;
