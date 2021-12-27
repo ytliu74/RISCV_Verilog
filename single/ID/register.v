@@ -27,9 +27,10 @@ module register (
                 Reg_data[write_reg_addr] <= write_reg_data;
             else
                 ;
-            read_reg_data_1 <= Reg_data[read_reg_addr_1];
-            read_reg_data_2 <= Reg_data[read_reg_addr_2];
         end
     end
-
+    always @(*) begin
+            read_reg_data_1 <= Reg_data[read_reg_addr_1];
+            read_reg_data_2 <= Reg_data[read_reg_addr_2];
+    end
 endmodule
