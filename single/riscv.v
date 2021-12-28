@@ -1,9 +1,9 @@
 `include "const.v"
-`include "if.v"
-`include "id.v"
-`include "ex.v"
-`include "mem.v"
-`include "debugger.v"
+`include "IF.v"
+`include "ID.v"
+`include "EX.v"
+`include "MEM.v"
+`include "DEBUGGER.v"
 
 
 module riscv(

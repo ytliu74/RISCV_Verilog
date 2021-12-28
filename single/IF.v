@@ -10,8 +10,6 @@ module IF (
     );
 
     reg [`INST_ADDR_WIDTH - 1:0] in_addr;
-    reg mid_rst;
-
     wire [`INST_ADDR_WIDTH - 1:0] seq_addr;
     wire [`INST_ADDR_WIDTH - 1:0] jump_addr;
 
@@ -21,16 +19,15 @@ module IF (
     assign jump_addr = out_addr + jump;
 
     always @(posedge clk or posedge reset) begin
-        if (reset + mid_rst > 0) begin
-            in_addr <= 0;
-            mid_rst <= 0;
+        if (reset) begin
+            in_addr <= -4;
         end
-        else
-            in_addr <= PCSrc? jump_addr : seq_addr;
-    end
-
-    always @(negedge reset) begin
-        mid_rst <= 1;
+        else begin
+            if (in_addr == -4)
+                in_addr <= 0;
+            else
+                in_addr <= PCSrc? jump_addr: seq_addr;
+        end
     end
 
     assign out_addr = in_addr;

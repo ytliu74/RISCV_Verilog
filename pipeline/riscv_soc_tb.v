@@ -18,13 +18,13 @@ module riscv_soc_tb();
     initial begin
         $dumpfile("wave.vcd");
         $dumpvars(0, riscv_soc_tb);
-        #11000 $finish;
     end
 
     initial begin
         rst = 1'b1;
         #300    rst= 1'b0;
         #10000 $display("---     result is %d         ---\n", verify);
+        #1000   $finish;
         // #1000   $stop;
     end
 

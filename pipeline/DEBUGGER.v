@@ -50,9 +50,9 @@ module DEBUGGER (
             `B_FORMAT_OPCODE: begin
                 case (funct3)
                     `BEQ_FUNCT3:
-                        $display("beq x%d, x%d, %d", rs1, rs2, imm);
+                        $display("beq x%d, x%d, imm", rs1, rs2);
                     `BLT_FUNCT3:
-                        $display("blt x%d, x%d, %d", rs1, rs2, imm);
+                        $display("blt x%d, x%d, imm", rs1, rs2);
                     default:
                         ;
                 endcase
@@ -63,15 +63,15 @@ module DEBUGGER (
             end
             // addi
             `I_addi_FORMAT_OPCODE: begin
-                $display("addi x%d, x%d, %d", rd, rs1, imm);
+                $display("addi x%d, x%d, imm", rd, rs1);
             end
             // lw
             `I_lw_FORMAT_OPCODE: begin
-                $display("lw x%d, %d(x%d)", rd, imm, rs1);
+                $display("lw x%d, imm(x%d)", rd, rs1);
             end
             // sw
             `S_FORMAT_OPCODE: begin
-                $display("sw x%d, %d(x%d)", rs2, imm, rs1);
+                $display("sw x%d, imm(x%d)", rs2, rs1);
             end
             default:
                 ;
