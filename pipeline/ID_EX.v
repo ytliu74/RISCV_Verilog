@@ -55,7 +55,7 @@ module ID_EX (
 
             {read_reg_data_1_out, read_reg_data_2_out, imm_out,
              inst_out, inst_addr_out, rd_out, rs1_out, rs2_out}
-            <= {read_reg_data_1_out, read_reg_data_2_in, imm_in,
+            <= {read_reg_data_1_in, read_reg_data_2_in, imm_in,
                 inst_in, inst_addr_in, rd_in, rs1_in, rs2_in};
         end
     end

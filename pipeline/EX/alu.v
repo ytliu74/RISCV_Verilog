@@ -7,7 +7,7 @@ module ALU (
         output wire zero,
         output reg [`ALU_DATA_WIDTH - 1:0] output_data
     );
-    always @ (input_data_1 or input_data_2 or ALU_control) begin
+    always @ (*) begin
         case (ALU_control)
             `ALU_AND:
                 output_data <= input_data_1 & input_data_2;

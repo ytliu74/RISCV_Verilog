@@ -12,7 +12,7 @@ module alu_control (
     assign funct3 = inst[`FUNCT3];
     assign funct7 = inst[`FUNCT7];
 
-    always @ (inst)  begin
+    always @ (*)  begin
         case (opcode)
             // add sub and or xor sll srl
             `R_FORMAT_OPCODE: begin

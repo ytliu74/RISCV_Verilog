@@ -23,13 +23,31 @@ module EX(
     wire [`REG_DATA_WIDTH - 1:0] input_data_1;
     wire [`REG_DATA_WIDTH - 1:0] input_data_2;
     wire [`ALU_CONTROL_WIDTH - 1:0] ALU_ctl;
-    wire [`REG_DATA_WIDTH - 1:0] input_A;
-    wire [`REG_DATA_WIDTH - 1:0] input_B;
+    reg [`REG_DATA_WIDTH - 1:0] input_A;
+    reg [`REG_DATA_WIDTH - 1:0] input_B;
 
     assign branch_addr = inst_addr + imm;
 
-    assign input_A = ForwardA[0] ? (forwarding_MEM_WB) : (ForwardA[1] ? (forwarding_EX_MEM) : (read_data_1));
-    assign input_B = ForwardB[0] ? (forwarding_MEM_WB) : (ForwardB[1] ? (forwarding_EX_MEM) : (read_data_2));
+    always @(*) begin
+        if (ForwardA == 2'b10)
+            input_A <= forwarding_EX_MEM;
+        else if (ForwardA == 2'b01)
+            input_A <= forwarding_MEM_WB;
+        else
+            input_A <= read_data_1;
+    end
+
+    always @(*) begin
+        if (ForwardB == 2'b10)
+            input_B <= forwarding_EX_MEM;
+        else if (ForwardA == 2'b01)
+            input_B <= forwarding_MEM_WB;
+        else
+            input_B <= read_data_2;
+    end
+
+    // assign input_A = ForwardA[0] ? (forwarding_MEM_WB) : (ForwardA[1] ? (forwarding_EX_MEM) : (read_data_1));
+    // assign input_B = ForwardB[0] ? (forwarding_MEM_WB) : (ForwardB[1] ? (forwarding_EX_MEM) : (read_data_2));
 
     assign input_data_1 = input_A;
     assign input_data_2 = ALUSrc ? imm : input_B; // ALUSrc MUX

@@ -138,8 +138,9 @@ module riscv(
            .rst(rst),
            // From IF/ID
            .inst(IF_ID_inst),
+           .RegWrite_in(MEM_WB_RegWrite),
            .write_data(WB_write_back_data),
-           .rd(IF_ID_rd),
+           .rd(WB_rd),
            .rs1(IF_ID_rs1),
            .rs2(IF_ID_rs2),
            .opcode(IF_ID_opcode),

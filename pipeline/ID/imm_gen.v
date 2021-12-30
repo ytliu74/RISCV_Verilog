@@ -11,7 +11,7 @@ module imm_gen (
     assign opcode = inst [`OPCODE];
     assign sign = inst [`INST_WIDTH - 1];
 
-    always @ (inst) begin
+    always @ (*) begin
         case (opcode)
             `R_FORMAT_OPCODE:
                 imm <= 0;

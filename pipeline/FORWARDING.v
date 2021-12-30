@@ -23,29 +23,31 @@ module FORWARDING (
         // EX Hazard
         if (EX_MEM_RegWrite && (EX_MEM_rd != 0)) begin
             if (EX_MEM_rd == ID_EX_rs1)
-                ForwardA <= 2'b10;
+                ForwardA = 2'b10;
             else
-                ;
+                ForwardA = 2'b00;
+
             if (EX_MEM_rd == ID_EX_rs2)
-                ForwardB <= 2'b10;
+                ForwardB = 2'b10;
             else
-                ;
+                ForwardB = 2'b00;
+
         end
 
         // MEM Hazard
         if (MEM_WB_RegWrite && (MEM_WB_rd != 0)) begin
             if (~(EX_MEM_RegWrite && (EX_MEM_rd != 0) && (EX_MEM_rd == ID_EX_rs1)))
                 if (MEM_WB_rd == ID_EX_rs1)
-                    ForwardA <= 2'b01;
+                    ForwardA = 2'b01;
                 else
-                    ;
+                    ForwardA = 2'b00;
             else
                 ;
             if (~(EX_MEM_RegWrite && (EX_MEM_rd != 0) && (EX_MEM_rd == ID_EX_rs2)))
                 if (MEM_WB_rd == ID_EX_rs2)
-                    ForwardB <= 2'b01;
+                    ForwardB = 2'b01;
                 else
-                    ;
+                    ForwardB = 2'b00;
             else
                 ;
         end

@@ -7,8 +7,9 @@ module ID (
         input wire clk,
         input wire rst,
         input wire [`INST_WIDTH - 1:0] inst,                 // Input inst from IF/ID
+        input wire RegWrite_in,                              // read from MEM/WB
         input wire [`REG_DATA_WIDTH - 1:0]write_data,        // write_back data from WB
-        input wire [`REG_ADDR_WIDTH-1:0] rd,                 // read from IF/ID
+        input wire [`REG_ADDR_WIDTH-1:0] rd,                 // read from WB
         input wire [`REG_ADDR_WIDTH-1:0] rs1,                // read from IF/ID
         input wire [`REG_ADDR_WIDTH-1:0] rs2,                // read from IF/ID
         input wire [`OPCODE_WIDTH - 1:0] opcode,             // read from IF/ID
@@ -38,8 +39,8 @@ module ID (
 
     register u_register (
                  .clk(clk),
-                 .reset(reset),
-                 .RegWrite(RegWrite),
+                 .reset(rst),
+                 .RegWrite(RegWrite_in),
                  .read_reg_addr_1(rs1),
                  .read_reg_addr_2(rs2),
                  .write_reg_addr(rd),
