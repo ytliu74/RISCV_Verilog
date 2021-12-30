@@ -1,7 +1,6 @@
 `include "const.v"
 
 module alu_control (
-        input wire [1:0] ALUOp,
         input wire [`INST_WIDTH - 1:0] inst,
         output reg [`ALU_CONTROL_WIDTH - 1:0] ALU_ctl
     );
