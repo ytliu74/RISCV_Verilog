@@ -3,6 +3,7 @@
 module control (
         input wire [`INST_WIDTH - 1:0] inst,
         input wire [`OPCODE_WIDTH - 1:0] opcode,
+        input wire stall,
         output wire Branch,
         output wire MemRead,
         output wire MemtoReg,
@@ -12,9 +13,9 @@ module control (
     );
     reg [5:0] code;
 
-    assign {ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch} = code;
+    assign {ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch} = stall ? 0 : code;
 
-    always @ (inst) begin
+    always @ (*) begin
         case (opcode)
             `R_FORMAT_OPCODE:
                 code <= 8'b001000;

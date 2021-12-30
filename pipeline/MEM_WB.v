@@ -6,6 +6,7 @@ module MEM_WB (
         //  -- Control Signals --
         input wire MemtoReg_in,                            // from EX/MEM
         input wire RegWrite_in,
+        input wire MemRead_in,
         //  ---------------------
         input wire [`REG_DATA_WIDTH - 1:0] ALU_result_in,  // from EX/MEM
         input wire [`REG_ADDR_WIDTH - 1:0] rd_in,          // from EX/MEM
@@ -13,6 +14,7 @@ module MEM_WB (
 
         output reg RegWrite_out,                           // output to REG in ID
         output reg MemtoReg_out,                           // output to WB
+        output reg MemRead_out,                            // output to FORWARDING
 
         output reg [`REG_DATA_WIDTH - 1:0] mem_data_out,   // output to WB
         output reg [`REG_DATA_WIDTH - 1:0] ALU_result_out, // output to WB
@@ -25,8 +27,8 @@ module MEM_WB (
             RegWrite_out <= 0;
         end
         else begin
-            {MemtoReg_out, RegWrite_out}
-            <= {MemtoReg_in, RegWrite_in};
+            {MemtoReg_out, RegWrite_out, MemRead_out}
+            <= {MemtoReg_in, RegWrite_in, MemRead_in};
 
             {mem_data_out, ALU_result_out, rd_out}
             <= {mem_data_in, ALU_result_in, rd_in};

@@ -3,6 +3,7 @@
 module ID_EX (
         input wire clk,
         input wire rst,
+        input wire ID_flush,
         //  -- Control Signals --
         input wire Branch_in,
         input wire MemRead_in,
@@ -48,6 +49,13 @@ module ID_EX (
             rd_out <= 0;
             rs1_out <= 0;
             rs2_out <= 0;
+        end
+        else if (ID_flush) begin
+            {Branch_out, MemRead_out, MemtoReg_out,
+             MemWrite_out, ALUSrc_out, RegWrite_out} <= 0;
+
+            {read_reg_data_1_out, read_reg_data_2_out, imm_out,
+             inst_out, inst_addr_out, rd_out, rs1_out, rs2_out} <= 0;
         end
         else begin
             {Branch_out, MemRead_out, MemtoReg_out, MemWrite_out, ALUSrc_out, RegWrite_out}

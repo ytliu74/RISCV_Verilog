@@ -5,7 +5,8 @@ module IF_ID (
         input wire rst,
         input wire [`INST_ADDR_WIDTH - 1:0] inst_addr_in,  // input from IF
         input wire [`INST_WIDTH - 1:0] inst_in,            // input from IF
-        input wire if_flush,                               // if_flush from HAZARD_DETECTION
+        input wire IF_ID_Write,                            // stall from DATA_HAZARD
+        input wire IF_flush,                               // flush from ID->CONTROL_HAZARD
 
         output reg [`OPCODE_WIDTH - 1:0] opcode,           // output to control and ID/EX
         output reg [`REG_ADDR_WIDTH - 1:0] rd,             // IF/ID.rd
@@ -24,8 +25,10 @@ module IF_ID (
             inst_out <= 0;
         end
         else begin
-            if (if_flush)  // Stall, do nothing
+            if (IF_ID_Write)  // Stall, do nothing
                 ;
+            else if (IF_flush)
+                {opcode, rd, rs1, rs2, inst_addr_out, inst_out} <= 0;    // flush
             else begin
                 inst_addr_out <= inst_addr_in;
                 inst_out <= inst_in;

@@ -4,7 +4,7 @@ module IF (
         input wire clk,
         input wire rst,
         input wire PCSrc,
-        input wire if_flush,                              // if_flush from hazard detection unit
+        input wire PCWrite,                              // stall from hazard detection unit
         input wire [`INST_ADDR_WIDTH - 1:0] branch_addr,  // From EX/MEM
 
         output wire [`INST_ADDR_WIDTH - 1:0] out_addr     // Connected to inst_mem->inst_addr_o & IF/ID
@@ -23,7 +23,7 @@ module IF (
         else begin
             if (in_addr == -4)
                 in_addr <= 0;
-            else if (if_flush)
+            else if (PCWrite)
                 in_addr <= in_addr;
             else
                 in_addr <= PCSrc? branch_addr: seq_addr;

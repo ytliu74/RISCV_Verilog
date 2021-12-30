@@ -9,7 +9,7 @@
 `include "MEM_WB.v"
 `include "WB.v"
 `include "FORWARDING.v"
-`include "HAZARD_DETECTION.v"
+`include "DATA_HAZARD.v"
 `include "DEBUGGER.v"
 
 
@@ -35,8 +35,10 @@ module riscv(
     assign inst_ce_o = ~rst;
     assign data_ce_o = ~rst;
 
-    wire if_flush;
-    assign if_flush = 1;
+    wire stall;
+
+    wire IF_flush;
+    wire ID_flush;
 
     wire [`OPCODE_WIDTH - 1:0] IF_ID_opcode;
     wire [`REG_ADDR_WIDTH - 1:0] IF_ID_rd;
@@ -72,6 +74,7 @@ module riscv(
 
     wire [`INST_ADDR_WIDTH - 1:0] EX_branch_addr;
     wire [`REG_DATA_WIDTH - 1:0] EX_ALU_result;
+    wire [`REG_DATA_WIDTH - 1:0] EX_read_reg_data_2;
     wire EX_ALU_Zero;
 
     wire EX_MEM_Branch;
@@ -90,6 +93,7 @@ module riscv(
 
     wire MEM_WB_RegWrite;
     wire MEM_WB_MemtoReg;
+    wire MEM_WB_MemRead;
     wire [`REG_DATA_WIDTH -1:0] MEM_WB_mem_data;
     wire [`REG_DATA_WIDTH - 1:0] MEM_WB_ALU_result;
     wire [`REG_ADDR_WIDTH -1:0] MEM_WB_rd;
@@ -109,7 +113,7 @@ module riscv(
            .clk(clk),
            .rst(rst),
            .PCSrc(MEM_PCSrc),
-           .if_flush(if_flush),
+           .PCWrite(stall),
            .branch_addr(EX_MEM_branch_addr),
            // OUTPUT
            .out_addr(inst_addr_o)
@@ -121,7 +125,8 @@ module riscv(
               .rst(rst),
               .inst_addr_in(inst_addr_o),
               .inst_in(inst_i),
-              .if_flush(if_flush), // !
+              .IF_ID_Write(stall),
+              .IF_flush(IF_flush),
 
               // OUTPUT
               .opcode(IF_ID_opcode),
@@ -144,6 +149,8 @@ module riscv(
            .rs1(IF_ID_rs1),
            .rs2(IF_ID_rs2),
            .opcode(IF_ID_opcode),
+           // From HAZARD
+           .stall(stall),
 
            // OUTPUT
            .Branch(ID_Branch),
@@ -155,12 +162,14 @@ module riscv(
            .read_reg_data_1(ID_read_reg_data_1),
            .read_reg_data_2(ID_read_reg_data_2),
            .imm(ID_imm)
+           //    .IF_flush(IF_flush)
        );
 
     ID_EX u_ID_EX(
               // INPUT
               .clk(clk),
               .rst(rst),
+              .ID_flush(ID_flush),
               // from ID
               .Branch_in(ID_Branch),
               .MemRead_in(ID_MemRead),
@@ -199,10 +208,12 @@ module riscv(
            // INPUT
            // from ID/EX
            .inst(ID_EX_inst),
+           .inst_addr(ID_EX_inst_addr),
            .read_data_1(ID_EX_read_reg_data_1),
            .read_data_2(ID_EX_read_reg_data_2),
            .imm(ID_EX_imm),
            .ALUSrc(ID_EX_ALUSrc),
+           .Branch(ID_EX_Branch),
            // from FORWARDING
            .ForwardA(ForwardA),
            .ForwardB(ForwardB),
@@ -211,8 +222,11 @@ module riscv(
 
            // OUTPUT
            .branch_addr(EX_branch_addr),
+           .read_reg_2_with_forwarding(EX_read_reg_data_2),
            .ALU_result(EX_ALU_result),
-           .ALU_zero(EX_ALU_Zero)
+           .ALU_zero(EX_ALU_Zero),
+           .IF_flush(IF_flush),
+           .ID_flush(ID_flush)
        );
 
     EX_MEM u_EX_MEM(
@@ -229,7 +243,7 @@ module riscv(
                .ALU_result_in(EX_ALU_result),
                .ALU_zero_in(EX_ALU_Zero),
                .branch_addr_in(EX_branch_addr),
-               .read_reg_data_2_in(ID_EX_read_reg_data_2),
+               .read_reg_data_2_in(EX_read_reg_data_2),
                .rd_in(ID_EX_rd),
 
                //OUTPUT
@@ -276,6 +290,7 @@ module riscv(
                // from EX/MEM
                .MemtoReg_in(EX_MEM_MemToReg),
                .RegWrite_in(EX_MEM_RegWrite),
+               .MemRead_in(EX_MEM_MemRead),
                .ALU_result_in(EX_MEM_ALU_result),
                .rd_in(EX_MEM_rd),
                // from MEM
@@ -283,7 +298,8 @@ module riscv(
 
                // OUTPUT
                .RegWrite_out(MEM_WB_RegWrite),
-               .MemtoReg_out(MEM_WB_MemToReg),
+               .MemtoReg_out(MEM_WB_MemtoReg),
+               .MemRead_out(MEM_WB_MemRead),
                .mem_data_out(MEM_WB_mem_data),
                .ALU_result_out(MEM_WB_ALU_result),
                .rd_out(MEM_WB_rd)
@@ -291,7 +307,7 @@ module riscv(
 
     WB u_WB(
            // INPUT
-           .MemtoReg(MEM_WB_MemToReg),
+           .MemtoReg(MEM_WB_MemtoReg),
            .mem_data(MEM_WB_mem_data),
            .ALU_result(MEM_WB_ALU_result),
            .rd_in(MEM_WB_rd),
@@ -305,12 +321,14 @@ module riscv(
                    // INPUT
                    .EX_MEM_RegWrite(EX_MEM_RegWrite),
                    .MEM_WB_RegWrite(MEM_WB_RegWrite),
+                   .MEM_WB_MemRead(MEM_WB_MemRead),
                    .EX_MEM_rd(EX_MEM_rd),
                    .MEM_WB_rd(MEM_WB_rd),
                    .ID_EX_rs1(ID_EX_rs1),
                    .ID_EX_rs2(ID_EX_rs2),
                    .forwarding_EX_MEM_in(EX_MEM_ALU_result),
-                   .forwarding_MEM_WB_in(MEM_WB_ALU_result),
+                   .forwarding_MEM_WB_ALU_in(MEM_WB_ALU_result),
+                   .forwarding_MEM_WB_MEM_in(MEM_WB_mem_data),
                    // OUTPUT
                    .forwarding_EX_MEM_out(forwarding_EX_MEM),
                    .forwarding_MEM_WB_out(forwarding_MEM_WB),
@@ -318,13 +336,13 @@ module riscv(
                    .ForwardB(ForwardB)
                );
 
-    HAZARD_DETECTION u_HAZARD_DETECTION(
-                         .ID_EX_MemRead(ID_EX_MemRead),
-                         .ID_EX_rd(ID_EX_rd),
-                         .IF_ID_rs1(IF_ID_rs1),
-                         .IF_ID_rs2(IF_ID_rs2),
-                         .if_flush(if_flush)
-                     );
+    DATA_HAZARD u_DATA_HAZARD(
+                    .ID_EX_MemRead(ID_EX_MemRead),
+                    .ID_EX_rd(ID_EX_rd),
+                    .IF_ID_rs1(IF_ID_rs1),
+                    .IF_ID_rs2(IF_ID_rs2),
+                    .stall(stall)
+                );
 
     DEBUGGER u_DEBUGGER(
                  .inst(inst_i),

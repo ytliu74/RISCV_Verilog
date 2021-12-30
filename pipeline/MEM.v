@@ -16,7 +16,7 @@ module MEM (
         output wire write_enable,                           // Generate `we` signal, connected to data_mem->we
         output wire [`MEM_ADDR_WIDTH - 1:0] mem_address,    // Connected to data_mem->addr
         output wire [`REG_DATA_WIDTH - 1:0] mem_data_i,     // Connected to data_mem->data_i
-        output wire [`MEM_ADDR_WIDTH - 1:0] mem_data_o_WB  // output to MEM/WB
+        output wire [`MEM_ADDR_WIDTH - 1:0] mem_data_o_WB   // output to MEM/WB
     );
 
     assign PCSrc = Branch && ALU_zero;
