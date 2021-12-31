@@ -22,18 +22,25 @@ module register (
             Reg_data[write_reg_addr] <= write_reg_data;
     end
 
-    always @(read_reg_addr_1 or read_reg_addr_2 or reset) begin
+    always @(*) begin
         if (reset) begin
             read_reg_data_1 <= 0;
             read_reg_data_2 <= 0;
         end
         else begin
-            read_reg_data_1 <= (read_reg_addr_1 == 0) ? 0:Reg_data[read_reg_addr_1];
-            read_reg_data_2 <= (read_reg_addr_2 == 0) ? 0:Reg_data[read_reg_addr_2];
+            if (RegWrite && read_reg_addr_1 == write_reg_addr)
+                read_reg_data_1 <= write_reg_data;
+            else
+                read_reg_data_1 <= (read_reg_addr_1 == 0) ? 0:Reg_data[read_reg_addr_1];
+
+            if (RegWrite && read_reg_addr_2 == write_reg_addr)
+                read_reg_data_2 <= write_reg_data;
+            else
+                read_reg_data_2 <= (read_reg_addr_2 == 0) ? 0:Reg_data[read_reg_addr_2];
         end
     end
 
-    always @(write_reg_data) begin
+    always @(*) begin
         $display("x1:%d,   x2:%d,   x3:%d,   x4:%d,   x5:%d", Reg_data[1], Reg_data[2], Reg_data[3], Reg_data[4], Reg_data[5] );
         $display("x6:%d,   x7:%d,   x8:%d,   x9:%d,   x10:%d", Reg_data[6], Reg_data[7], Reg_data[8], Reg_data[9], Reg_data[10] );
         $display("x11:%d,  x12:%d,  x13:%d,  x14:%d   x15:%d", Reg_data[11], Reg_data[12], Reg_data[13], Reg_data[14], Reg_data[15]);
