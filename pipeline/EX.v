@@ -61,6 +61,7 @@ module EX(
             .input_data_1 (input_data_1),
             .input_data_2 (input_data_2),
             .ALU_control (ALU_ctl),
+            .pc(inst_addr),
             .zero (ALU_zero),
             .output_data(ALU_result)
         );

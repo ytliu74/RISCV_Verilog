@@ -32,7 +32,7 @@ module ID_EX (
         output reg [`REG_DATA_WIDTH - 1:0] read_reg_data_2_out, // output to EX
         output reg [`REG_DATA_WIDTH - 1:0] imm_out,             // output to EX
         output reg [`INST_WIDTH - 1:0] inst_out,                // output to EX/MEM
-        output reg [`INST_ADDR_WIDTH - 1:0] inst_addr_out,      // output to EX/MEM
+        output reg [`INST_ADDR_WIDTH - 1:0] inst_addr_out,      // output to EX/MEM & EX(for jal)
         output reg [`REG_ADDR_WIDTH - 1:0] rd_out,              // ID/EX.rd
         output reg [`REG_ADDR_WIDTH - 1:0] rs1_out,             // ID/EX.rs1
         output reg [`REG_ADDR_WIDTH - 1:0] rs2_out              // ID/EX.rs2
