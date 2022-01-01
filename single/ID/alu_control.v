@@ -49,7 +49,7 @@ module alu_control (
             end
             // jal
             `J_FORMAT_OPCODE: begin
-                ALU_ctl <= `ALU_NULL;
+                ALU_ctl <= `ALU_JAL;
             end
             // addi
             `I_addi_FORMAT_OPCODE: begin

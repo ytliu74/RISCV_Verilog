@@ -77,6 +77,7 @@ module riscv(
            .read_data_1(read_reg_data_1),
            .read_data_2(read_reg_data_2),
            .imm(jump),
+           .pc(inst_addr_o),
            .ALU_ctl(ALU_ctl),
            .ALUSrc(ALUSrc),
            // OUTPUT

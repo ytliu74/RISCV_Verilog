@@ -33,7 +33,7 @@ module register (
         end
     end
 
-    always @(write_reg_data) begin
+    always @(*) begin
         $display("x1:%d,   x2:%d,   x3:%d,   x4:%d,   x5:%d", Reg_data[1], Reg_data[2], Reg_data[3], Reg_data[4], Reg_data[5] );
         $display("x6:%d,   x7:%d,   x8:%d,   x9:%d,   x10:%d", Reg_data[6], Reg_data[7], Reg_data[8], Reg_data[9], Reg_data[10] );
         $display("x11:%d,  x12:%d,  x13:%d,  x14:%d   x15:%d", Reg_data[11], Reg_data[12], Reg_data[13], Reg_data[14], Reg_data[15]);

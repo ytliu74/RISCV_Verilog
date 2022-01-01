@@ -4,6 +4,7 @@ module ALU (
         input wire [`ALU_DATA_WIDTH - 1:0] input_data_1,
         input wire [`ALU_DATA_WIDTH - 1:0] input_data_2,
         input wire [`ALU_CONTROL_WIDTH - 1:0] ALU_control,
+        input wire [`INST_ADDR_WIDTH - 1:0] pc,
         output wire zero,
         output reg [`ALU_DATA_WIDTH - 1:0] output_data
     );
@@ -27,10 +28,13 @@ module ALU (
                 output_data <= input_data_1 << input_data_2;
             `ALU_SRL:
                 output_data <= input_data_1 >> input_data_2;
+            `ALU_JAL:
+                output_data <= pc + 4;
             default:
                 ;
         endcase
     end
 
-    assign zero = output_data == 0 ? 1'b1: 1'b0;
+    assign zero = (ALU_control == `ALU_JAL) ?
+           1'b1 : (output_data == 0 ? 1'b1: 1'b0);
 endmodule

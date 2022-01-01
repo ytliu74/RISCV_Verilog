@@ -79,8 +79,7 @@
 `define ALU_XOR 4'b0100
 `define ALU_SLL 4'b0101
 `define ALU_SRL 4'b0110
-
-`define ALU_NULL 4'b1111
+`define ALU_JAL 4'b1111
 
 `define ALU_CONTROL_WIDTH 4
 `define ALU_DATA_WIDTH 32

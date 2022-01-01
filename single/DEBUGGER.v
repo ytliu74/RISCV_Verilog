@@ -59,7 +59,7 @@ module DEBUGGER (
             end
             // jal
             `J_FORMAT_OPCODE: begin
-                $display("jal");
+                $display("jal x%d, imm", rd);
             end
             // addi
             `I_addi_FORMAT_OPCODE: begin
