@@ -1,6 +1,5 @@
 `include "const.v"
 
-// ! Cannot deal with forwarding
 // Instantiate in EX
 module CONTROL_HAZARD (
         input wire Branch,                // from ID_EX

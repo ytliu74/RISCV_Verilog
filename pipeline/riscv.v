@@ -76,19 +76,16 @@ module riscv(
     wire [`REG_DATA_WIDTH - 1:0] EX_ALU_result;
     wire [`REG_DATA_WIDTH - 1:0] EX_read_reg_data_2;
     wire EX_ALU_Zero;
+    wire EX_PCSrc;
 
-    wire EX_MEM_Branch;
     wire EX_MEM_MemRead;
     wire EX_MEM_MemToReg;
     wire EX_MEM_MemWrite;
     wire EX_MEM_RegWrite;
     wire [`REG_DATA_WIDTH - 1:0] EX_MEM_ALU_result;
-    wire EX_MEM_ALU_Zero;
-    wire [`INST_ADDR_WIDTH - 1:0] EX_MEM_branch_addr;
     wire [`REG_DATA_WIDTH -1:0] EX_MEM_read_reg_data_2;
     wire [`REG_ADDR_WIDTH -1:0] EX_MEM_rd;
 
-    wire MEM_PCSrc;
     wire [`REG_DATA_WIDTH -1:0] MEM_mem_data;
 
     wire MEM_WB_RegWrite;
@@ -112,9 +109,9 @@ module riscv(
            // INPUT
            .clk(clk),
            .rst(rst),
-           .PCSrc(MEM_PCSrc),
+           .PCSrc(EX_PCSrc),
            .PCWrite(stall),
-           .branch_addr(EX_MEM_branch_addr),
+           .branch_addr(EX_branch_addr),
            // OUTPUT
            .out_addr(inst_addr_o)
        );
@@ -224,7 +221,7 @@ module riscv(
            .branch_addr(EX_branch_addr),
            .read_reg_2_with_forwarding(EX_read_reg_data_2),
            .ALU_result(EX_ALU_result),
-           .ALU_zero(EX_ALU_Zero),
+           .PCSrc(EX_PCSrc),
            .IF_flush(IF_flush),
            .ID_flush(ID_flush)
        );
@@ -234,27 +231,21 @@ module riscv(
                .clk(clk),
                .rst(rst),
                // from ID/EX
-               .Branch_in(ID_EX_Branch),
                .MemRead_in(ID_EX_MemRead),
                .MemtoReg_in(ID_EX_MemToReg),
                .MemWrite_in(ID_EX_MemWrite),
                .RegWrite_in(ID_EX_RegWrite),
                // from EX
                .ALU_result_in(EX_ALU_result),
-               .ALU_zero_in(EX_ALU_Zero),
-               .branch_addr_in(EX_branch_addr),
                .read_reg_data_2_in(EX_read_reg_data_2),
                .rd_in(ID_EX_rd),
 
                //OUTPUT
-               .Branch_out(EX_MEM_Branch),
                .MemRead_out(EX_MEM_MemRead),
                .MemtoReg_out(EX_MEM_MemToReg),
                .MemWrite_out(EX_MEM_MemWrite),
                .RegWrite_out(EX_MEM_RegWrite),
                .ALU_result_out(EX_MEM_ALU_result),
-               .ALU_zero_out(EX_MEM_ALU_Zero),
-               .branch_addr_out(EX_MEM_branch_addr),
                .read_reg_data_2_out(EX_MEM_read_reg_data_2),
                .rd_out(EX_MEM_rd)
            );
@@ -262,19 +253,16 @@ module riscv(
     MEM u_MEM(
             // INPUT
             // from EX/MEM
-            .Branch(EX_MEM_Branch),
             .MemRead(EX_MEM_MemRead),
             .MemtoReg(EX_MEM_MemToReg),
             .MemWrite(EX_MEM_MemWrite),
             .RegWrite(EX_MEM_RegWrite),
             .ALU_result(EX_MEM_ALU_result),
-            .ALU_zero(EX_MEM_ALU_Zero),
             .reg_read_data(EX_MEM_read_reg_data_2),
             // from data_mem
             .mem_data_o(data_i),
 
             // OUTPUT
-            .PCSrc(MEM_PCSrc),
             // to data_mem
             .write_enable(data_we_o),
             .mem_address(data_addr_o),

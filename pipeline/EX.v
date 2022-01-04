@@ -17,20 +17,22 @@ module EX(
         input wire [`REG_DATA_WIDTH - 1:0] forwarding_EX_MEM, // forwarding EX/MEM from FORWARDING
         input wire [`REG_DATA_WIDTH - 1:0] forwarding_MEM_WB, // forwarding MEM/WB from FORWARDING
 
-        output wire [`INST_ADDR_WIDTH - 1:0] branch_addr,     // output to EX/MEM
+        output wire [`INST_ADDR_WIDTH - 1:0] branch_addr,     // output to IF
         output wire [`REG_DATA_WIDTH - 1:0] ALU_result,
         output wire [`REG_DATA_WIDTH - 1:0] read_reg_2_with_forwarding,  // output to EX/MEM
-        output wire ALU_zero,                                     // Set high if ALU_result is zero, output to EX/MEM
+        output wire PCSrc,                                    // output to IF
         output wire IF_flush,                                  // output to IF/ID
         output wire ID_flush                                   // output to ID/EX
     );
 
+    wire ALU_zero;
     wire [`REG_DATA_WIDTH - 1:0] input_data_1;
     wire [`REG_DATA_WIDTH - 1:0] input_data_2;
     wire [`ALU_CONTROL_WIDTH - 1:0] ALU_ctl;
     reg [`REG_DATA_WIDTH - 1:0] input_A;
     reg [`REG_DATA_WIDTH - 1:0] input_B;
 
+    assign PCSrc = Branch && ALU_zero;
     assign branch_addr = inst_addr + imm;
 
     always @(*) begin
