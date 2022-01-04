@@ -22,7 +22,7 @@ module register (
             Reg_data[write_reg_addr] <= write_reg_data;
     end
 
-    always @(read_reg_addr_1 or read_reg_addr_2 or reset) begin
+    always @(*) begin
         if (reset) begin
             read_reg_data_1 <= 0;
             read_reg_data_2 <= 0;
