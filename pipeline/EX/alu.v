@@ -8,6 +8,13 @@ module ALU (
         output wire zero,
         output reg [`ALU_DATA_WIDTH - 1:0] output_data
     );
+
+    wire data_1_sign;
+    wire data_2_sign;
+
+    assign data_1_sign = input_data_1[`ALU_DATA_WIDTH - 1];
+    assign data_2_sign = input_data_2[`ALU_DATA_WIDTH - 1];
+
     always @ (*) begin
         case (ALU_control)
             `ALU_AND:
@@ -20,8 +27,16 @@ module ALU (
                 output_data <= input_data_1 - input_data_2;
             `ALU_NOR:
                 output_data <= ~ (input_data_1 | input_data_2);
-            `ALU_LT:
-                output_data <= input_data_1 < input_data_2? 1'b0 : 1'b1;
+            `ALU_LT: begin
+                case ({data_1_sign, data_2_sign})
+                    2'b00, 2'b11:  // With same sign
+                        output_data <= input_data_1 < input_data_2 ? 0 : 1;
+                    2'b10:  // data_1 < 0 , data_2 >= 0
+                        output_data <= 0;
+                    2'b01:  // data_1 >= 0 , data_2 < 0
+                        output_data <= 1;
+                endcase
+            end
             `ALU_XOR:
                 output_data <= input_data_1 ^ input_data_2;
             `ALU_SLL:

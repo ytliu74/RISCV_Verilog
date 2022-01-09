@@ -13,7 +13,7 @@ module register (
     );
 
     // 32 * 64bit
-    reg [`REG_DATA_WIDTH - 1:0] Reg_data [0:`REG_SIZE];
+    reg signed [`REG_DATA_WIDTH - 1:0] Reg_data [0:`REG_SIZE];
 
     always @(posedge clk or posedge reset) begin
         if (reset)
