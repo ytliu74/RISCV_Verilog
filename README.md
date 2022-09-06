@@ -12,5 +12,5 @@ Both `single` and `pipeline`  have passed the example code, which is stored at `
 
 
 
-**However, there still might be some bugs.**
+**Although this code passed all tests provided by TA, there still might be some bugs.**
 
