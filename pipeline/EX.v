@@ -37,20 +37,20 @@ module EX(
 
     always @(*) begin
         if (ForwardA == 2'b10)
-            input_A <= forwarding_EX_MEM;
+            input_A = forwarding_EX_MEM;
         else if (ForwardA == 2'b01)
-            input_A <= forwarding_MEM_WB;
+            input_A = forwarding_MEM_WB;
         else
-            input_A <= read_data_1;
+            input_A = read_data_1;
     end
 
     always @(*) begin
         if (ForwardB == 2'b10)
-            input_B <= forwarding_EX_MEM;
+            input_B = forwarding_EX_MEM;
         else if (ForwardB == 2'b01)
-            input_B <= forwarding_MEM_WB;
+            input_B = forwarding_MEM_WB;
         else
-            input_B <= read_data_2;
+            input_B = read_data_2;
     end
 
     assign input_data_1 = input_A;

@@ -24,12 +24,12 @@ module register (
 
     always @(*) begin
         if (reset) begin
-            read_reg_data_1 <= 0;
-            read_reg_data_2 <= 0;
+            read_reg_data_1 = 0;
+            read_reg_data_2 = 0;
         end
         else begin
-            read_reg_data_1 <= (read_reg_addr_1 == 0) ? 0:Reg_data[read_reg_addr_1];
-            read_reg_data_2 <= (read_reg_addr_2 == 0) ? 0:Reg_data[read_reg_addr_2];
+            read_reg_data_1 = (read_reg_addr_1 == 0) ? 0:Reg_data[read_reg_addr_1];
+            read_reg_data_2 = (read_reg_addr_2 == 0) ? 0:Reg_data[read_reg_addr_2];
         end
     end
 

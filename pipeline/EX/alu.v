@@ -18,33 +18,33 @@ module ALU (
     always @ (*) begin
         case (ALU_control)
             `ALU_AND:
-                output_data <= input_data_1 & input_data_2;
+                output_data = input_data_1 & input_data_2;
             `ALU_OR:
-                output_data <= input_data_1 | input_data_2;
+                output_data = input_data_1 | input_data_2;
             `ALU_ADD:
-                output_data <= input_data_1 + input_data_2;
+                output_data = input_data_1 + input_data_2;
             `ALU_SUB:
-                output_data <= input_data_1 - input_data_2;
+                output_data = input_data_1 - input_data_2;
             `ALU_NOR:
-                output_data <= ~ (input_data_1 | input_data_2);
+                output_data = ~ (input_data_1 | input_data_2);
             `ALU_LT: begin
                 case ({data_1_sign, data_2_sign})
                     2'b00, 2'b11:  // With same sign
-                        output_data <= input_data_1 < input_data_2 ? 0 : 1;
+                        output_data = input_data_1 < input_data_2 ? 0 : 1;
                     2'b10:  // data_1 < 0 , data_2 >= 0
-                        output_data <= 0;
+                        output_data = 0;
                     2'b01:  // data_1 >= 0 , data_2 < 0
-                        output_data <= 1;
+                        output_data = 1;
                 endcase
             end
             `ALU_XOR:
-                output_data <= input_data_1 ^ input_data_2;
+                output_data = input_data_1 ^ input_data_2;
             `ALU_SLL:
-                output_data <= input_data_1 << input_data_2;
+                output_data = input_data_1 << input_data_2;
             `ALU_SRL:
-                output_data <= input_data_1 >> input_data_2;
+                output_data = input_data_1 >> input_data_2;
             `ALU_JAL:
-                output_data <= pc + 4;
+                output_data = pc + 4;
             default:
                 ;
         endcase

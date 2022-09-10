@@ -30,11 +30,11 @@ module data_mem(
 
     always @ * begin
         if (ce == 1'b0) begin
-            data_o <= 32'b0;
+            data_o = 32'b0;
         end
         else if(we == 1'b0)  // read anytime
         begin
-            data_o <= {
+            data_o = {
                        data[addr+3],
                        data[addr+2],
                        data[addr+1],
@@ -42,7 +42,7 @@ module data_mem(
                    };
         end
         else begin
-            data_o <= 32'b0;
+            data_o = 32'b0;
         end
     end
 

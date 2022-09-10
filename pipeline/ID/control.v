@@ -18,19 +18,19 @@ module control (
     always @ (*) begin
         case (opcode)
             `R_FORMAT_OPCODE:
-                code <= 8'b001000;
+                code = 8'b001000;
             `B_FORMAT_OPCODE:
-                code <= 8'b000001;
+                code = 8'b000001;
             `J_FORMAT_OPCODE:
-                code <= 8'b001001;
+                code = 8'b001001;
             `I_addi_FORMAT_OPCODE:
-                code <= 8'b101000;
+                code = 8'b101000;
             `I_lw_FORMAT_OPCODE:
-                code <= 8'b111100;
+                code = 8'b111100;
             `S_FORMAT_OPCODE:
-                code <= 8'b100010;
+                code = 8'b100010;
             default:
-                code <= 0;
+                code = 0;
         endcase
     end
 endmodule

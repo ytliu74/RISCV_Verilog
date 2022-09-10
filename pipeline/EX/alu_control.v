@@ -18,19 +18,19 @@ module alu_control (
             `R_FORMAT_OPCODE: begin
                 case ({funct3, funct7})
                     {`ADD_FUNCT3, `ADD_FUNCT7}:
-                        ALU_ctl <= `ALU_ADD;
+                        ALU_ctl = `ALU_ADD;
                     {`SUB_FUNCT3, `SUB_FUNCT7}:
-                        ALU_ctl <= `ALU_SUB;
+                        ALU_ctl = `ALU_SUB;
                     {`XOR_FUNCT3, `XOR_FUNCT7}:
-                        ALU_ctl <= `ALU_XOR;
+                        ALU_ctl = `ALU_XOR;
                     {`OR_FUNCT3, `OR_FUNCT7}:
-                        ALU_ctl <= `ALU_OR;
+                        ALU_ctl = `ALU_OR;
                     {`AND_FUNCT3, `AND_FUNCT7}:
-                        ALU_ctl <= `ALU_AND;
+                        ALU_ctl = `ALU_AND;
                     {`SLL_FUNCT3, `SLL_FUNCT7}:
-                        ALU_ctl <= `ALU_SLL;
+                        ALU_ctl = `ALU_SLL;
                     {`SRL_FUNCT3, `SRL_FUNCT7}:
-                        ALU_ctl <= `ALU_SRL;
+                        ALU_ctl = `ALU_SRL;
                     default:
                         ;
                 endcase
@@ -39,28 +39,28 @@ module alu_control (
             `B_FORMAT_OPCODE: begin
                 case (funct3)
                     `BEQ_FUNCT3:
-                        ALU_ctl <= `ALU_SUB;
+                        ALU_ctl = `ALU_SUB;
                     `BLT_FUNCT3:
-                        ALU_ctl <= `ALU_LT;
+                        ALU_ctl = `ALU_LT;
                     default:
                         ;
                 endcase
             end
             // jal
             `J_FORMAT_OPCODE: begin
-                ALU_ctl <= `ALU_JAL;
+                ALU_ctl = `ALU_JAL;
             end
             // addi
             `I_addi_FORMAT_OPCODE: begin
-                ALU_ctl <= `ALU_ADD;
+                ALU_ctl = `ALU_ADD;
             end
             // lw
             `I_lw_FORMAT_OPCODE: begin
-                ALU_ctl <= `ALU_ADD;
+                ALU_ctl = `ALU_ADD;
             end
             // sw
             `S_FORMAT_OPCODE: begin
-                ALU_ctl <= `ALU_ADD;
+                ALU_ctl = `ALU_ADD;
             end
             default:
                 ;

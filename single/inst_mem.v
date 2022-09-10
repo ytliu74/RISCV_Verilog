@@ -11,10 +11,10 @@ module inst_mem(
 
     always @ * begin
         if (ce == 1'b0) begin
-            inst <= 32'b0;
+            inst = 32'b0;
         end
         else begin
-            inst <= inst_memory [addr[31:2]];  // 1 instruction = 4 bytes
+            inst = inst_memory [addr[31:2]];  // 1 instruction = 4 bytes
         end
     end
 
