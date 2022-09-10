@@ -8,8 +8,8 @@
 
 module riscv(
 
-        input wire				 clk,
-        input wire				 rst,         // high is reset
+        input wire		clk,
+        input wire		rst,         // high is reset
 
         // inst_mem
         input wire[31:0]         inst_i,
