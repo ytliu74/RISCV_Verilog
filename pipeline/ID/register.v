@@ -16,8 +16,17 @@ module register (
   reg signed [`REG_DATA_WIDTH - 1:0] Reg_data[0:`REG_SIZE];
 
   always @(posedge clk or posedge reset) begin
-    if (reset);
-    else if (RegWrite) Reg_data[write_reg_addr] <= write_reg_data;
+    if (reset)
+      // Reset all registers to 0
+      for (
+        integer i = 0; i < `REG_SIZE + 1; i++
+      )
+      Reg_data[i] <= 0;
+    else if (RegWrite) begin
+      if (write_reg_addr) Reg_data[write_reg_addr] <= write_reg_data;
+      // Cannot write `x0`
+      else;
+    end
   end
 
   always @(*) begin
